@@ -1,0 +1,13 @@
+import {CalendarDays,GripVertical,MoreHorizontal,Tag,User} from "lucide-react";
+import {priorityClasses,priorityLabels,type Task} from "@/types/kanban";
+import {Badge} from "@/components/ui/badge"; import {Button} from "@/components/ui/button";
+import {DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+export function TaskCard({task,onMove,onDelete,onEdit}:{task:Task;onMove:(s:Task["status"])=>void;onDelete:()=>void;onEdit:()=>void}){
+ return <article draggable onDragStart={e=>{e.dataTransfer.setData("text/task-id",task.id);e.dataTransfer.effectAllowed="move"}} className="group cursor-grab rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md active:cursor-grabbing">
+  <div className="flex gap-2"><GripVertical className="mt-1 h-4 w-4 shrink-0 text-slate-300"/><div className="min-w-0 flex-1">
+   <div className="flex items-start justify-between gap-2"><h3 className="font-semibold text-slate-900">{task.title}</h3><DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-7 w-7"><MoreHorizontal/></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={onEdit}>Editar</DropdownMenuItem><DropdownMenuItem onClick={()=>onMove("todo")}>A fazer</DropdownMenuItem><DropdownMenuItem onClick={()=>onMove("doing")}>Em andamento</DropdownMenuItem><DropdownMenuItem onClick={()=>onMove("done")}>Concluído</DropdownMenuItem><DropdownMenuItem className="text-red-600" onClick={onDelete}>Excluir</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div>
+   {task.description&&<p className="mt-2 line-clamp-2 text-sm text-slate-500">{task.description}</p>}
+   <div className="mt-3 flex flex-wrap gap-1.5"><Badge variant="outline" className={priorityClasses[task.priority]}>{priorityLabels[task.priority]}</Badge>{task.tags.slice(0,3).map(tag=><Badge key={tag} variant="secondary"><Tag className="mr-1 h-3 w-3"/>{tag}</Badge>)}</div>
+   <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs text-slate-500"><span className="flex items-center gap-1"><User className="h-3.5 w-3.5"/>{task.assignee||"Sem responsável"}</span>{task.dueDate&&<span className="flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5"/>{new Date(task.dueDate+"T00:00:00").toLocaleDateString("pt-BR")}</span>}</div>
+  </div></div></article>
+}
