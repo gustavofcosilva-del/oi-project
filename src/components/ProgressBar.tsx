@@ -1,0 +1,2 @@
+interface Props{value:number;label?:string}
+export default function ProgressBar({value,label}:Props){return <div className="progress-wrap">{label&&<div className="progress-label"><span>{label}</span><strong>{value}%</strong></div>}<div className="progress-track"><div className="progress-fill" style={{width:value+'%'}}/></div></div>}
