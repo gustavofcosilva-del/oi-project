@@ -1,24 +1,23 @@
-# Oi Project
+# Oi Project — Kanban de Tarefas
 
-oi
+Sistema web de gerenciamento de tarefas em formato Kanban.
 
-This project was built with [Lovable](https://lovable.dev).
+## Funcionalidades
+- Backlog, A fazer, Em andamento e Concluído.
+- Criar, editar e excluir tarefas.
+- Arrastar e soltar entre colunas.
+- Prioridade, etiquetas, responsável e prazo.
+- Busca e filtro por prioridade.
+- Indicadores do quadro.
+- Persistência no navegador com localStorage.
 
-## Build with Lovable
+## Stack
+React 19 + TypeScript + Vite + TanStack Router + Tailwind CSS + Radix UI.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/5d18aaf8-5c80-4a19-9681-a861d5141857).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+## Desenvolvimento
+```bash
+npm install
 npm run dev
 ```
+
+A aplicação abre na rota `/`.
