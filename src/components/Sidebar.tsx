@@ -1,0 +1,6 @@
+import {BookOpen,Brain,Home,LineChart,Trophy,BarChart3} from 'lucide-react'
+import type {Section} from '../types'
+interface Props{section:Section;setSection:(s:Section)=>void}
+const items:{id:Section;label:string;icon:any}[]=[{id:'home',label:'Início',icon:Home},{id:'lessons',label:'Aprender',icon:BookOpen},{id:'practice',label:'Praticar',icon:Brain},{id:'graphs',label:'Gráficos',icon:LineChart},{id:'enem',label:'ENEM',icon:Trophy},{id:'progress',label:'Meu progresso',icon:BarChart3}]
+export default function Sidebar({section,setSection}:Props){
+return <aside className="sidebar"><div className="brand"><div className="brand-mark">ƒ</div><div><strong>Função de 1º Grau</strong><span>Aprendizagem interativa</span></div></div><nav>{items.map(({id,label,icon:Icon})=><button key={id} className={section===id?'nav-item active':'nav-item'} onClick={()=>setSection(id)}><Icon size={19}/><span>{label}</span></button>)}</nav><div className="sidebar-note">Conteúdo estruturado a partir do material didático enviado.</div></aside>}
