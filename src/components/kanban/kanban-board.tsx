@@ -1,0 +1,20 @@
+import {useMemo,useState} from "react";
+import {CheckCircle2,Clock3,ListTodo,Plus,Search,Target} from "lucide-react";
+import type {Task,TaskPriority} from "@/types/kanban"; import {columns} from "@/types/kanban";
+import {useKanban} from "@/hooks/use-kanban";
+import {Button} from "@/components/ui/button"; import {Input} from "@/components/ui/input";
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/components/ui/select";
+import {KanbanColumn} from "./kanban-column"; import {TaskDialog} from "./task-dialog";
+export function KanbanBoard(){
+ const {tasks,filteredTasks,search,setSearch,priority,setPriority,addTask,updateTask,deleteTask,moveTask}=useKanban();
+ const [editing,setEditing]=useState<Task>(); const [open,setOpen]=useState(false);
+ const stats=useMemo(()=>({total:tasks.length,done:tasks.filter(t=>t.status==="done").length,doing:tasks.filter(t=>t.status==="doing").length,urgent:tasks.filter(t=>t.priority==="urgent"&&t.status!=="done").length}),[tasks]);
+ const create=()=>{setEditing(undefined);setOpen(true)}; const edit=(t:Task)=>{setEditing(t);setOpen(true)};
+ const save=(data:Omit<Task,"id"|"createdAt">)=>editing?updateTask(editing.id,data):addTask(data);
+ return <div className="min-h-screen bg-[#f7f8fa] text-slate-900"><header className="border-b border-slate-200 bg-white"><div className="mx-auto max-w-[1600px] px-5 py-5 lg:px-8">
+ <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between"><div><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white"><Target/></div><div><p className="text-xs font-semibold uppercase tracking-[.18em] text-slate-400">Oi Project</p><h1 className="text-2xl font-bold tracking-tight">Quadro de tarefas</h1></div></div><p className="mt-3 text-sm text-slate-500">Organize prioridades, responsáveis e entregas em um único lugar.</p></div><Button onClick={create}><Plus/>Nova tarefa</Button></div>
+ <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><Stat icon={<ListTodo/>} label="Total" value={stats.total}/><Stat icon={<Clock3/>} label="Em andamento" value={stats.doing}/><Stat icon={<CheckCircle2/>} label="Concluídas" value={stats.done}/><Stat icon={<Target/>} label="Urgentes abertas" value={stats.urgent}/></div>
+ <div className="mt-5 flex flex-col gap-3 md:flex-row"><div className="relative flex-1"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/><Input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar tarefa, responsável ou etiqueta..." className="pl-9"/></div><Select value={priority} onValueChange={v=>setPriority(v as "all"|TaskPriority)}><SelectTrigger className="md:w-52"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="all">Todas as prioridades</SelectItem><SelectItem value="urgent">Urgente</SelectItem><SelectItem value="high">Alta</SelectItem><SelectItem value="medium">Média</SelectItem><SelectItem value="low">Baixa</SelectItem></SelectContent></Select></div>
+ </div></header><main className="mx-auto max-w-[1600px] px-5 py-6 lg:px-8"><div className="flex gap-4 overflow-x-auto pb-4">{columns.map(c=><KanbanColumn key={c.id} column={c} tasks={filteredTasks.filter(t=>t.status===c.id)} onAdd={create} onMove={moveTask} onDelete={deleteTask} onEdit={edit}/>)}</div></main><TaskDialog task={editing} open={open} onOpenChange={setOpen} onSave={save}/></div>;
+}
+function Stat({icon,label,value}:{icon:React.ReactNode;label:string;value:number}){return <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5"><div className="flex items-center gap-3"><div className="rounded-lg bg-white p-2 text-slate-500 shadow-sm">{icon}</div><div><p className="text-xs font-medium text-slate-500">{label}</p><p className="text-xl font-bold">{value}</p></div></div></div>}
