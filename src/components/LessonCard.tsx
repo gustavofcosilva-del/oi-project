@@ -1,0 +1,3 @@
+import type {Lesson} from '../types'
+interface Props{lesson:Lesson;onClick:()=>void}
+export default function LessonCard({lesson,onClick}:Props){return <button className="lesson-card" onClick={onClick}><div className="lesson-icon">{lesson.icon}</div><div className="lesson-body"><span className="eyebrow">AULA</span><h3>{lesson.title}</h3><p>{lesson.subtitle}</p><div className="chips">{lesson.concepts.slice(0,3).map(c=><span key={c}>{c}</span>)}</div></div><span className="arrow">→</span></button>}
